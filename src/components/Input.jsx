@@ -5,13 +5,14 @@ const Input = () => {
   const [title, setTitle] = useState("");
   const [selectLanguage, setSelectLanguage] = useState(null);
   const [languages, setLanguages] = useState([]);
+  const [text, setText] = useState("Select A Specific Language");
 
-  const onClick = () => {
+  const onClick = (e) => {
     if (!title) {
       toast.error("Please Provide Text");
       return;
     }
-
+    e.preventDefault();
     const msg = new SpeechSynthesisUtterance();
     msg.text = title;
     if (selectLanguage) {
@@ -21,13 +22,17 @@ const Input = () => {
   };
 
   const getLanguages = () => {
-    setLanguages(window.speechSynthesis.getVoices());
+    if (languages.length > 0) {
+      setText("Select A Specific Language");
+      setLanguages([]);
+    } else {
+      setLanguages(window.speechSynthesis.getVoices());
+      setText("Use Default Language");
+    }
   };
 
   return (
-    <div className="bg-gray-600 min-h-[100vh] max-h-full w-[100vw] flex justify-center items-center flex-col overflow-x-hidden" onClick={()=>{
-        setSelectLanguage(null)
-    }}>
+    <div className="bg-gray-600 min-h-[100vh] max-h-full w-[100vw] flex justify-center items-center flex-col overflow-x-hidden">
       <div className="flex justify-center items-center flex-col h-full">
         <h1 className="text-white text-5xl mb-16 font-bold text-center">
           Text-to speech for disabled individuals
@@ -43,17 +48,19 @@ const Input = () => {
             setTitle(e.target.value);
           }}
           id="title"
-          onKeyDown={(e)=>{
-            if(e.code == "Enter"){
-                onClick()
-                return;
+          onKeyDown={(e) => {
+            if (e.code == "Enter") {
+              onClick();
+              return;
             }
           }}
         />
         <div className="flex justify-center items-center flex-wrap">
           <button
             className="mt-4 bg-purple-700 border border-purple-700 mx-2 rounded-xl px-7 py-3 outline-none text-white hover:bg-gray-200 hover:text-purple-700 "
-            onClick={onClick}
+            onClick={(e) => {
+              onClick(e);
+            }}
           >
             Speak
           </button>
@@ -61,7 +68,7 @@ const Input = () => {
             className="mt-4 bg-purple-700 border border-purple-700 mx-2 rounded-xl px-7 py-3 outline-none text-white hover:bg-gray-200 hover:text-purple-700 "
             onClick={getLanguages}
           >
-            Select A Specific Language
+            {text}
           </button>
         </div>
         {languages.length > 0 && (
@@ -70,27 +77,30 @@ const Input = () => {
           </h1>
         )}
         <div className="w-full flex justify-center flex-wrap">
-          {languages.length>0 && languages.map((item, index) => (
-            <div
-              className={
-                `text-white min-w-[20rem] max-w-full border border-purple-400 px-3 h-[12vh]  mx-2 my-2 cursor-pointer flex flex-col justify-center items-center common ${selectLanguage && selectLanguage.name === item.name ? "bg-gray-400" : "bg-transparent"}`
-              }
-              key={index}
-              id={item.name}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectLanguage(item);
-                toast.success("Language Selected");
-              }}
-            >
-              <p>
-                <b>Name</b> -- {item.name}
-              </p>
-              <p>
-                <b>Language Code</b> -- {item.lang}
-              </p>
-            </div>
-          ))}
+          {languages.length > 0 &&
+            languages.map((item, index) => (
+              <div
+                className={`text-white min-w-[20rem] max-w-full border border-purple-400 px-3 h-[12vh]  mx-2 my-2 cursor-pointer flex flex-col justify-center items-center common ${
+                  selectLanguage && selectLanguage.name === item.name
+                    ? "bg-gray-400"
+                    : "bg-transparent"
+                }`}
+                key={index}
+                id={item.name}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectLanguage(item);
+                  toast.success("Language Selected");
+                }}
+              >
+                <p>
+                  <b>Name</b> -- {item.name}
+                </p>
+                <p>
+                  <b>Language Code</b> -- {item.lang}
+                </p>
+              </div>
+            ))}
         </div>
       </div>
     </div>
