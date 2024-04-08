@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const Input = () => {
   const [title, setTitle] = useState("");
   const [selectLanguage, setSelectLanguage] = useState(null);
   const [languages, setLanguages] = useState([]);
-
-  // const languages = window.speechSynthesis.getVoices()
-  // console.log(languages)
 
   const onClick = () => {
     if (!title) {
@@ -39,13 +36,13 @@ const Input = () => {
           placeholder="Enter Text"
           type="text"
           value={title}
-          className="outline-none px-2 py-2.5 border text-white bg-transparent mb-4"
+          className="outline-none px-2 py-2.5 border text-white bg-transparent mb-4 md:w-[22rem] lg:w-[24rem] w-[18rem]"
           onChange={(e) => {
             setTitle(e.target.value);
           }}
           id="title"
         />
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center flex-wrap">
           <button
             className="mt-4 bg-purple-700 border border-purple-700 mx-2 rounded-xl px-7 py-3 outline-none text-white hover:bg-gray-200 hover:text-purple-700 "
             onClick={onClick}
