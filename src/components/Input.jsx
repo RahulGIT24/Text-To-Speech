@@ -25,7 +25,9 @@ const Input = () => {
   };
 
   return (
-    <div className="bg-gray-600 min-h-[100vh] max-h-full w-[100vw] flex justify-center items-center flex-col overflow-x-hidden">
+    <div className="bg-gray-600 min-h-[100vh] max-h-full w-[100vw] flex justify-center items-center flex-col overflow-x-hidden" onClick={()=>{
+        setSelectLanguage(null)
+    }}>
       <div className="flex justify-center items-center flex-col h-full">
         <h1 className="text-white text-5xl mb-16 font-bold text-center">
           Text-to speech for disabled individuals
@@ -75,7 +77,8 @@ const Input = () => {
               }
               key={index}
               id={item.name}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setSelectLanguage(item);
                 toast.success("Language Selected");
               }}
