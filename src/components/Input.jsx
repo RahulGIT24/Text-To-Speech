@@ -6,12 +6,11 @@ const Input = () => {
   const [selectLanguage, setSelectLanguage] = useState(null);
   const [languages, setLanguages] = useState([]);
 
-  const onClick = (e) => {
+  const onClick = () => {
     if (!title) {
       toast.error("Please Provide Text");
       return;
     }
-    e.preventDefault()
     const msg = new SpeechSynthesisUtterance();
     msg.text = title;
     if (selectLanguage) {
@@ -51,7 +50,7 @@ const Input = () => {
         <div className="flex justify-center items-center flex-wrap">
           <button
             className="mt-4 bg-purple-700 border border-purple-700 mx-2 rounded-xl px-7 py-3 outline-none text-white hover:bg-gray-200 hover:text-purple-700 "
-            onClick={(e)=>{onClick(e)}}
+            onClick={onClick}
           >
             Speak
           </button>
