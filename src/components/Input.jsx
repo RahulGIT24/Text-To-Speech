@@ -8,7 +8,7 @@ const Input = () => {
 
   const onClick = () => {
     if (!title) {
-      toast.error("Please Provide name");
+      toast.error("Please Provide Text");
       return;
     }
 
