@@ -41,6 +41,12 @@ const Input = () => {
             setTitle(e.target.value);
           }}
           id="title"
+          onKeyDown={(e)=>{
+            if(e.code == "Enter"){
+                onClick()
+                return;
+            }
+          }}
         />
         <div className="flex justify-center items-center flex-wrap">
           <button
@@ -65,7 +71,7 @@ const Input = () => {
           {languages.length>0 && languages.map((item, index) => (
             <div
               className={
-                "bg-transparent text-white min-w-[20rem] max-w-full border border-purple-400 px-3 h-[12vh]  mx-2 my-2 cursor-pointer flex flex-col justify-center items-center common"
+                `bg-transparent text-white min-w-[20rem] max-w-full border border-purple-400 px-3 h-[12vh]  mx-2 my-2 cursor-pointer flex flex-col justify-center items-center common ${selectLanguage && selectLanguage.name === item.name ? "bg-gray-400" : "bg-transparent"}`
               }
               key={index}
               id={index}
