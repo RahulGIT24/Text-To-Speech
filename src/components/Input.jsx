@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 const Input = () => {
@@ -6,23 +6,25 @@ const Input = () => {
   const [selectLanguage, setSelectLanguage] = useState(null);
   const [languages, setLanguages] = useState([]);
 
-  useEffect(() => {
-    setLanguages(window.speechSynthesis.getVoices());
-  }, []);
+  // const languages = window.speechSynthesis.getVoices()
+  // console.log(languages)
 
   const onClick = () => {
     if (!title) {
       toast.error("Please Provide name");
       return;
     }
-    if (!selectLanguage) {
-      toast.error("Please Select A language");
-      return;
-    }
+
     const msg = new SpeechSynthesisUtterance();
     msg.text = title;
-    msg.lang = selectLanguage.lang;
+    if (selectLanguage) {
+      msg.lang = selectLanguage.lang;
+    }
     window.speechSynthesis.speak(msg);
+  };
+
+  const getLanguages = () => {
+    setLanguages(window.speechSynthesis.getVoices());
   };
 
   return (
@@ -43,35 +45,46 @@ const Input = () => {
           }}
           id="title"
         />
-        <button
-          className="mt-4 bg-purple-700 border border-purple-700 rounded-xl px-7 py-3 outline-none text-white hover:bg-gray-200 hover:text-purple-700 "
-          onClick={onClick}
-        >
-          Speak
-        </button>
-        <h1 className="text-white text-5xl my-5 font-bold text-center">
-          Available Languages
-        </h1>
+        <div className="flex justify-center items-center">
+          <button
+            className="mt-4 bg-purple-700 border border-purple-700 mx-2 rounded-xl px-7 py-3 outline-none text-white hover:bg-gray-200 hover:text-purple-700 "
+            onClick={onClick}
+          >
+            Speak
+          </button>
+          <button
+            className="mt-4 bg-purple-700 border border-purple-700 mx-2 rounded-xl px-7 py-3 outline-none text-white hover:bg-gray-200 hover:text-purple-700 "
+            onClick={getLanguages}
+          >
+            Select A Specific Language
+          </button>
+        </div>
+        {languages.length > 0 && (
+          <h1 className="text-white text-5xl my-5 font-bold text-center">
+            Available Languages
+          </h1>
+        )}
         <div className="w-full flex justify-center flex-wrap">
-          {languages &&
-            languages.map((item, index) => (
-              <div
-                className={"bg-transparent text-white min-w-[20rem] max-w-full border border-purple-400 px-3 h-[12vh]  mx-2 my-2 cursor-pointer flex flex-col justify-center items-center common"}
-                key={index}
-                id={index}
-                onClick={() => {
-                  setSelectLanguage(item);
-                  toast.success("Language Selected");
-                }}
-              >
-                <p>
-                  <b>Name</b> -- {item.name}
-                </p>
-                <p>
-                  <b>Language Code</b> -- {item.lang}
-                </p>
-              </div>
-            ))}
+          {languages.length>0 && languages.map((item, index) => (
+            <div
+              className={
+                "bg-transparent text-white min-w-[20rem] max-w-full border border-purple-400 px-3 h-[12vh]  mx-2 my-2 cursor-pointer flex flex-col justify-center items-center common"
+              }
+              key={index}
+              id={index}
+              onClick={() => {
+                setSelectLanguage(item);
+                toast.success("Language Selected");
+              }}
+            >
+              <p>
+                <b>Name</b> -- {item.name}
+              </p>
+              <p>
+                <b>Language Code</b> -- {item.lang}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
